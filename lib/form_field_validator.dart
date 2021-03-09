@@ -12,11 +12,11 @@ abstract class FieldValidator<T> {
   FieldValidator(this.errorText);
 
   /// checks the input against the given conditions
-  bool isValid(T value);
+  bool isValid(T? value);
 
   /// call is a special function that makes a class callable
   /// returns null if the input is valid otherwise it returns the provided error errorText
-  String? call(T value) {
+  String? call(T? value) {
     return isValid(value) ? null : errorText;
   }
 }
@@ -29,8 +29,8 @@ abstract class TextFieldValidator extends FieldValidator<String> {
   bool get ignoreEmptyValues => true;
 
   @override
-  String? call(String value) {
-    return (ignoreEmptyValues && value.isEmpty) ? null : super.call(value);
+  String? call(String? value) {
+    return (ignoreEmptyValues && value != null && value.isEmpty) ? null : super.call(value);
   }
 
   /// helper function to check if an input matches a given pattern
@@ -45,12 +45,12 @@ class RequiredValidator extends TextFieldValidator {
   bool get ignoreEmptyValues => false;
 
   @override
-  bool isValid(String value) {
-    return value.isNotEmpty;
+  bool isValid(String? value) {
+    return value != null && value.isNotEmpty ;
   }
 
   @override
-  String? call(String value) {
+  String? call(String? value) {
     return isValid(value) ? null : errorText;
   }
 }
@@ -61,8 +61,8 @@ class MaxLengthValidator extends TextFieldValidator {
   MaxLengthValidator(this.max, {required String errorText}) : super(errorText);
 
   @override
-  bool isValid(String value) {
-    return value.length <= max;
+  bool isValid(String? value) {
+    return value != null && value.length <= max;
   }
 }
 
@@ -75,8 +75,8 @@ class MinLengthValidator extends TextFieldValidator {
   bool get ignoreEmptyValues => false;
 
   @override
-  bool isValid(String value) {
-    return value.length >= min;
+  bool isValid(String? value) {
+    return value != null && value.length >= min;
   }
 }
 
@@ -92,8 +92,8 @@ class LengthRangeValidator extends TextFieldValidator {
       : super(errorText);
 
   @override
-  bool isValid(String value) {
-    return value.length >= min && value.length <= max;
+  bool isValid(String? value) {
+    return  value != null && value.length >= min && value.length <= max;
   }
 }
 
@@ -106,9 +106,9 @@ class RangeValidator extends TextFieldValidator {
       : super(errorText);
 
   @override
-  bool isValid(String value) {
+  bool isValid(String? value) {
     try {
-      final numericValue = num.parse(value);
+      final numericValue = num.parse(value!);
       return (numericValue >= min && numericValue <= max);
     } catch (_) {
       return false;
@@ -124,8 +124,8 @@ class EmailValidator extends TextFieldValidator {
   EmailValidator({required String errorText}) : super(errorText);
 
   @override
-  bool isValid(String value) =>
-      hasMatch(_emailPattern as String, value, caseSensitive: false);
+  bool isValid(String? value) =>
+      hasMatch(_emailPattern as String, value!, caseSensitive: false);
 }
 
 class PatternValidator extends TextFieldValidator {
@@ -137,8 +137,8 @@ class PatternValidator extends TextFieldValidator {
       : super(errorText);
 
   @override
-  bool isValid(String value) =>
-      hasMatch(pattern as String, value, caseSensitive: caseSensitive);
+  bool isValid(String? value) =>
+      hasMatch(pattern as String, value!, caseSensitive: caseSensitive);
 }
 
 class DateValidator extends TextFieldValidator {
@@ -147,9 +147,9 @@ class DateValidator extends TextFieldValidator {
   DateValidator(this.format, {required String errorText}) : super(errorText);
 
   @override
-  bool isValid(String value) {
+  bool isValid(String? value) {
     try {
-      DateFormat(format).parseStrict(value);
+      DateFormat(format).parseStrict(value!);
       return true;
     } catch (_) {
       return false;
@@ -175,7 +175,7 @@ class MultiValidator extends FieldValidator {
   }
 
   @override
-  String? call(dynamic value) {
+  String? call(dynamic? value) {
     return isValid(value) ? null : _errorText;
   }
 }
@@ -186,7 +186,7 @@ class MatchValidator {
 
   MatchValidator({required this.errorText});
 
-  String? validateMatch(String value, String value2) {
+  String? validateMatch(String? value, String? value2) {
     return value == value2 ? null : errorText;
   }
 }
