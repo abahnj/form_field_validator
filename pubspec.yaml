@@ -5,7 +5,7 @@ author: Milad Akarie <milad.akarie@gmail.com>
 homepage: https://github.com/Milad-Akarie/form_field_validator
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
