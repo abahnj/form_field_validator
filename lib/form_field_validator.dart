@@ -9,7 +9,7 @@ abstract class FieldValidator<T> {
   /// the errorText to display when the validation fails
   final String errorText;
 
-  FieldValidator(required this.errorText);
+  FieldValidator(this.errorText);
 
   /// checks the input against the given conditions
   bool isValid(T value);
@@ -22,7 +22,7 @@ abstract class FieldValidator<T> {
 }
 
 abstract class TextFieldValidator extends FieldValidator<String> {
-  TextFieldValidator(required String errorText) : super(errorText);
+  TextFieldValidator(String errorText) : super(errorText);
 
   // return false if you want the validator to return error
   // message when the value is empty.
